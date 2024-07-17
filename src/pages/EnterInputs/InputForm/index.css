@@ -1,0 +1,94 @@
+.enterInputs {
+    width: 1200px;
+    margin-top: 65px;
+    border-radius: 8px;
+    max-width: 1000px;
+    margin-left: 8%;
+    line-height: 25px;
+  }
+
+  h2{
+    margin-bottom: 25px;
+  }
+  
+  #optionalInputs{
+    margin-top: 40px;
+  }
+
+
+  .form-group {
+    margin-bottom: 15px;
+    /* justify-content: space-between; Aligns items with space between them */
+    display: grid;
+    grid-template-columns: repeat(6, 1fr); 
+    gap: 10px; /* Space between grid items */
+  }
+  
+  .form-group label {
+    display: block;
+    font-size: 15px;
+    font-weight: bold;
+  }
+  
+  .form-group input {
+    width: 50%;
+    padding: 8px;
+    box-sizing: border-box;
+    flex-direction: column; /* Stacks label and input vertically */
+  }
+
+  input[type="text"].inputs {
+    padding: 8px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    width: 100%; /* Makes input fill its parent */
+    max-width: 150px; /* Maximum width for the input box */
+}
+
+
+.radio-group{
+    font-size: 14px; /* Makes the text smaller */
+    font-weight: bold;
+    display: block; /* Puts each label on a new line */
+    margin-bottom: 0px; /* Adds space between lines */
+  }
+  
+/* .radio-group input[type="radio"] {
+    vertical-align: middle; 
+  } */
+
+
+.inputsSubmit{
+    top: 15px; 
+    /* margin-left: 100px; */
+    background-color: #b0b0b0; 
+    color: #1c1c1c; /* Dark text color */
+    border: none; /* Remove default border */
+    border-radius: 40px; /* Round corners */
+    padding: 15px 22px; /* Padding for size */
+    font-size: 18px; /* Font size */
+    font-weight: bold; /* Bold text */
+    text-align: center; /* Center text */
+    cursor: pointer; /* Pointer cursor on hover */
+    transition: background-color 0.3s, box-shadow 0.3s; /* Smooth transitions */
+    outline: none; /* Remove outline on focus */
+    position:relative;
+}
+
+.inputsSubmit::after {
+    content: "";
+    position: absolute;
+    bottom: 12px; /* Position of the underline */
+    left: 50%;
+    transform: translateX(-50%);
+    width: 70%; /* Width of the underline */
+    height: 2px; /* Thickness of the underline */
+    background-color: #333; /* Color of the underline */
+}
+
+/* Hover effect */
+.inputsSubmit:hover {
+    background-color: #9b9ea1; /* Darker grey on hover */
+    box-shadow: 2px 4px 8px rgba(0, 0, 0, 0.1); /* Shadow on hover */
+}
+  

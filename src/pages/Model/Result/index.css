@@ -1,0 +1,43 @@
+#results-label{
+    margin-top: 30px;
+    margin-bottom: 12px;
+}
+
+.displayPic{
+    width: 500px;
+}
+
+#pic2{
+    margin-left: 3%;
+}
+
+  
+.custom-button {
+    margin-top:12px;
+    background-color: #c7c7c7;
+    color: #353535;
+    border: none;
+    border-radius: 25px;
+    padding: 6px 12px;
+    margin-bottom: 10px; /* Space between buttons */
+    font-size: 13px;
+    font-weight: bold;
+    cursor: pointer;
+}
+
+
+#button2{
+    margin-left: 3%;
+    margin-right: 72%;
+}
+
+#download{
+    cursor: pointer;
+    border: none;
+    background-color: rgb(0,0,0,0);
+    width: 10px;
+}
+
+#download .downloadIcon{
+    width: 35px;
+}
