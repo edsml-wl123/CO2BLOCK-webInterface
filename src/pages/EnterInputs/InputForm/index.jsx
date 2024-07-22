@@ -50,11 +50,11 @@ const InputForm = ({ parentState, sendDataToParent }) => {
 
       const newParentState = {
         ...parentState,
-        activeModule: 'model',
+        // activeModule: 'model',
         inputs: inputs
       };
       sendDataToParent(newParentState);
-      navigate('/model/enter-inputs')
+      navigate('/model/enter-inputs');
     }
   };
 

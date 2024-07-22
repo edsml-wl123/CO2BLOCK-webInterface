@@ -18,7 +18,7 @@ const FileUploader = ({ parentState, sendDataToParent, readFile, accept }) => {
       if (file) {
         setUploaded(true);
         readFile(file,(inputs_data) => {
-          console.log(inputs_data);
+          // console.log(inputs_data);
           const newParentState = {
               ...parentState,
               inputs: inputs_data

@@ -40,6 +40,7 @@ class App extends Component{
       },
       selectedReservoir:null,
     };
+
      
     handleDataFromChild = (data) => {
         this.setState(data);
@@ -47,14 +48,27 @@ class App extends Component{
 
 
     handleModuleChange = (module) => {
-      if (module !== this.state.activeModule) 
-        this.setState({ activeModule: module });
+      if (module !== this.state.activeModule) {
+        if (module==='enter-inputs'){
+          console.log('set to default');
+          console.log(module, this.state.activeModule);
+          this.setState({ activeModule: module,
+              inputs: { name: '', domainType: 'open', minDepth: '', meanDepth: '', thickness: '', area:'',  
+              meanPermeability: '', meanPorosity: '', rockCompressibility: '', waterCompressibility: '',
+              co2Density: '', co2Viscosity: '', waterViscosity: '', porePressure: '', meanPressure: '',
+              meanTemperature: '', brineSalinity: '', principalStress: '', stressRatio: '', 
+              frictionCoefficient: '', cohesion: '', tensileStrength: '' }
+          });
+        }
+        else{
+          this.setState(prevState => ({
+            ...prevState,activeModule: module }),()=>console.log(this.state));
+        }
+      }
     };
 
 
     render() {
-      // console.log('render APP');
-      // console.log(this.state);
         return (
           <div className="menu">
             <aside>
@@ -112,8 +126,6 @@ class App extends Component{
                  enteredInputs={this.state.inputs} selectedReservoir={null}/>}/>
                 <Route path="/model/map/:reservoirID" element={<Model inputsRoute='map'
                  enteredInputs={null} selectedReservoir={this.state.selectedReservoir}/>}/>
-                 {/* <Route path="/model/map/run" element={<Model inputsRoute='map'
-                 enteredInputs={null} selectedReservoir={this.state.selectedReservoir}/>}/> */}
                 <Route path="/optimize/outputs" element={<Optimize readOutputs={true} accept=".xlsx,.xls" />}/>
                 <Route path="/optimize" element={<Optimize readOutputs={false} accept=".xlsx,.xls" />}/>
                 <Route path="/help" element={<Help/>}/>

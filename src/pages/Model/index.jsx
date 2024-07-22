@@ -16,6 +16,7 @@ const Model = ({inputsRoute, enteredInputs, selectedReservoir}) => {
     const [error, setError] = useState(null);
 
     useEffect(() => {
+      console.log(enteredInputs);
         if(inputsRoute==='enter-inputs' && enteredInputs!==null) setReceivedInputs(enteredInputs);
         if(inputsRoute==='map' && selectedReservoir!==null) setReceivedInputs(selectedReservoir);
     }, [inputsRoute]);
@@ -28,7 +29,6 @@ const Model = ({inputsRoute, enteredInputs, selectedReservoir}) => {
     };
 
     const backend_port = process.env.REACT_APP_BACKEND_PORT;
-    const navigate=useNavigate();
     const runCO2BLOCK = async(limits) => {
         try {
             const response = await axios.post(`http://localhost:${backend_port}/model/${inputsRoute}/run`, limits);

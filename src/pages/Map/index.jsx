@@ -8,6 +8,7 @@ import L from 'leaflet';
 import _ from 'lodash';
 import colorBar from '../../pic/colorBar.png';
 import notice from '../../pic/notice-icon.png'
+import noticeDetail from '../../pic/notice-detail.png'
 
 
 const Map = ({ parentState, sendDataToParent, readData })=>{
@@ -32,6 +33,7 @@ const Map = ({ parentState, sendDataToParent, readData })=>{
   const [hovered1, setHovered1] = useState(false);
   const [hovered2, setHovered2] = useState(false);
   const [hovered3, setHovered3] = useState(false);
+  const [hovered4, setHovered4] = useState(false);
   const [fillOpacity, setFillOpacity] = useState(0.0);
 
 
@@ -137,7 +139,6 @@ const Map = ({ parentState, sendDataToParent, readData })=>{
     //       Overall CO2<br/>Storage
     //     </button>
     // </div>
-    
     
     <MapContainer center={[57.5, 1.16]} zoom={6} style={{ height: '100vh', width: '100%' }}>
       <TileLayer
@@ -273,19 +274,26 @@ const Map = ({ parentState, sendDataToParent, readData })=>{
       />
       </Control>
 
-      <Control position='topleft' label='notice' tooltip="notice">
-        <img src={notice} alt="Notice"
-          style={{
-            display:heatMap?'inline':'none',
-            width:'35px',
-            marginTop: '10px', marginLeft:'0px'
-          }}
+      <Control position='topleft'>
+      <div style={{
+        display: heatMap ? 'inline-block' : 'none',
+        position: 'relative', width: '330px',
+        marginTop: '10px', marginLeft: '0px'
+      }}>
+      <img src={hovered4 ? noticeDetail : notice} alt="Notice"
+        style={{ width: '100%', pointerEvents: 'none' }}
       />
-      <Tooltip>Notice</Tooltip>
+      <div
+        style={{
+          position: 'absolute', top: '0%', left: '0%', width: '10%', height: '20%', 
+          pointerEvents: 'auto', backgroundColor: 'rgba(255, 255, 255, 0)'
+        }}
+        onMouseEnter={() => setHovered4(true)} onMouseLeave={() => setHovered4(false)}
+      ></div>
+    </div>
+        
       </Control>      
-      
     </MapContainer>
-    
   );
 }
 

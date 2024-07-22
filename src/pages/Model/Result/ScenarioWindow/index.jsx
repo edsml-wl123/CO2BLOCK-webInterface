@@ -110,7 +110,7 @@ const Scenario = ({ wellNum, distance, injectionRate, timeDuration, totalCO2Stor
 
 
     const getLineWidth = (rowGrid) => {
-      if (rowGrid > 30) return '0.5px';
+      if (rowGrid > 40) return '0.5px';
       // if (rowGrid > 20) return '0.75px';
       if (rowGrid > 15) return '1px';
       if (rowGrid > 10) return '1.5px';
