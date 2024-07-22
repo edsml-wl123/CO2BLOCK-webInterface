@@ -9,6 +9,7 @@ import downloadIcon from '../../pic/downloadIcon.png';
 
 const Optimize = ({readOutputs, accept}) => {
     const [clicked, setClicked] = useState(false);
+    const [upload, setUpload] = useState(false);
     const [rates, setRates] = useState({
         capture_cost: 50,
         transport_cost: 8,
@@ -36,9 +37,11 @@ const Optimize = ({readOutputs, accept}) => {
         })
         .catch(error => {
           console.error('There was an error uploading the file:', error);
-        });
-        
+        }); 
+
+        setUpload(true);
       };
+
 
     const handleChange = (event) => {
         const { name, value } = event.target;   
@@ -67,6 +70,7 @@ const Optimize = ({readOutputs, accept}) => {
                   alert(error);
             }
             setSubmitted(true);
+            // setUpload(false);
         }
         
     }
@@ -86,10 +90,6 @@ const Optimize = ({readOutputs, accept}) => {
                             throw new Error('Incorrect type of revenue rates.\n');
                         }   
                     }
-                    // setRates((prevRates) => ({
-                    //     ...prevRates,
-                    //     revenue: revenue_rates,
-                    // }));
                     validatedRates.revenue = revenue_rates;
                 }
             }
@@ -135,7 +135,6 @@ const Optimize = ({readOutputs, accept}) => {
               alert(`Error: ${error.message}`); // Other errors (network issues, etc.)
           }
         }
-
     };
 
 
@@ -192,7 +191,7 @@ const Optimize = ({readOutputs, accept}) => {
                 <label>Revenue rates (€/tCO2):</label>
                 <input type="text" className='rates' name="revenue" required={true} value={rates.revenue} onChange={handleChange}/>
               </div>
-              <button className="ratesSubmit" type="submit">OPTIMIZE</button>
+              <button className="ratesSubmit" type="submit" disabled={!readOutputs&&!upload?true:false}>OPTIMIZE</button>
           </form>
 
           {result?

@@ -119,7 +119,6 @@ const Scenario = ({ wellNum, distance, injectionRate, timeDuration, totalCO2Stor
       return '4px';
     };
     const lineWidth=getLineWidth(grid.rowGrid);
-    console.log(lineWidth);
 
     const getCircleDiameter = (rowGrid) =>{
       if (rowGrid>30) return '2px';

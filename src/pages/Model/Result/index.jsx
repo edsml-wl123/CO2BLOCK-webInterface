@@ -45,15 +45,12 @@ const Result= ({resultsGenerated, limits, maxScenario}) => {
 
 
     const handleDownload = async(event) => {
-        console.log('clicked');
         event.preventDefault();
         event.stopPropagation();
-
-        if (results) {
+        if (results) 
             for (let i=0;i<results.length;i++){
                 await downloadFile(`http://localhost:${backend_port}/${results[i]}`);
             }
-        }
       };
 
     const downloadFile = async (url) => {

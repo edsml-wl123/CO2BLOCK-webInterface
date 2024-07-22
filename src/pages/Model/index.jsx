@@ -16,7 +16,6 @@ const Model = ({inputsRoute, enteredInputs, selectedReservoir}) => {
     const [error, setError] = useState(null);
 
     useEffect(() => {
-      console.log(enteredInputs);
         if(inputsRoute==='enter-inputs' && enteredInputs!==null) setReceivedInputs(enteredInputs);
         if(inputsRoute==='map' && selectedReservoir!==null) setReceivedInputs(selectedReservoir);
     }, [inputsRoute]);

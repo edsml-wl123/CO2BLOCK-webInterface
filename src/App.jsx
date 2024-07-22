@@ -50,19 +50,19 @@ class App extends Component{
     handleModuleChange = (module) => {
       if (module !== this.state.activeModule) {
         if (module==='enter-inputs'){
-          console.log('set to default');
-          console.log(module, this.state.activeModule);
-          this.setState({ activeModule: module,
-              inputs: { name: '', domainType: 'open', minDepth: '', meanDepth: '', thickness: '', area:'',  
+          this.setState({ 
+            activeModule: module,
+            inputs: {  // clear previous inputs 
+              name: '', domainType: 'open', minDepth: '', meanDepth: '', thickness: '', area:'',  
               meanPermeability: '', meanPorosity: '', rockCompressibility: '', waterCompressibility: '',
               co2Density: '', co2Viscosity: '', waterViscosity: '', porePressure: '', meanPressure: '',
-              meanTemperature: '', brineSalinity: '', principalStress: '', stressRatio: '', 
-              frictionCoefficient: '', cohesion: '', tensileStrength: '' }
+              meanTemperature: '', brineSalinity: '', principalStress: '', stressRatio: '',  
+              frictionCoefficient: '', cohesion: '', tensileStrength: '' 
+            }
           });
         }
         else{
-          this.setState(prevState => ({
-            ...prevState,activeModule: module }),()=>console.log(this.state));
+          this.setState({ activeModule: module });
         }
       }
     };
