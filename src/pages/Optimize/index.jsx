@@ -25,13 +25,15 @@ const Optimize = ({readOutputs, accept}) => {
         console.log('clicked');
       };
 
+
+    const backend_ip = process.env.REACT_APP_VPC_PRIVATE_IP;
     const backend_port = process.env.REACT_APP_BACKEND_PORT;
     const handleFileChange = (event) => {
         const file=event.target.files[0];
         const formData = new FormData();
         formData.append('file', file);
 
-        axios.post(`http://localhost:${backend_port}/optimize/upload`, formData)
+        axios.post(`http://${backend_ip}:${backend_port}/optimize/upload`, formData)
           .then(response => {
             console.log('File successfully uploaded:', response.data);
         })
@@ -58,7 +60,7 @@ const Optimize = ({readOutputs, accept}) => {
             console.log('Rates validated', validatedRates);
 
             try {
-                const response = await axios.post(`http://localhost:${backend_port}/optimize/run`,{
+                const response = await axios.post(`http://${backend_ip}:${backend_port}/optimize/run`,{
                     readOutputs:readOutputs, rates:validatedRates
                 });
                 console.log('Backend reponse:', response.data);
@@ -123,7 +125,7 @@ const Optimize = ({readOutputs, accept}) => {
 
     const getOptimizeResult = async() =>{
         try {
-            const response = await axios.get(`http://localhost:${backend_port}/optimize/result`);
+            const response = await axios.get(`http://${backend_ip}:${backend_port}/optimize/result`);
             setResult(response.data);
             console.log('Get optimization result from backend', response.data);
         } catch (error) {
@@ -148,7 +150,7 @@ const Optimize = ({readOutputs, accept}) => {
         event.stopPropagation();
 
         if (result) 
-            await downloadFile(`http://localhost:${backend_port}/${result}`);
+            await downloadFile(`http://${backend_ip}:${backend_port}/${result}`);
       };
 
     const downloadFile = async (url) => {
@@ -197,7 +199,7 @@ const Optimize = ({readOutputs, accept}) => {
           {result?
             <>
             <img style={{width:readOutputs?'650px':'',  top:readOutputs?'31%':''}}
-            id='optimiza-result' className='optimizePic' src={getCacheBustedUrl(`http://localhost:${backend_port}/${result}`)} alt='optimizePic' />
+            id='optimiza-result' className='optimizePic' src={getCacheBustedUrl(`http://${backend_ip}:${backend_port}/${result}`)} alt='optimizePic' />
             <button style={{marginLeft: readOutputs?'63%':'',marginTop: readOutputs?'35%':''}} 
             id='optDownload' onClick={handleDownload}>
                 <img src={downloadIcon} className='downloadIcon' onClick={handleDownload}/>

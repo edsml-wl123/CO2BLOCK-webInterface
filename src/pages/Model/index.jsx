@@ -27,10 +27,11 @@ const Model = ({inputsRoute, enteredInputs, selectedReservoir}) => {
         runCO2BLOCK(limits);
     };
 
+    const backend_ip = process.env.REACT_APP_VPC_PRIVATE_IP;
     const backend_port = process.env.REACT_APP_BACKEND_PORT;
     const runCO2BLOCK = async(limits) => {
         try {
-            const response = await axios.post(`http://localhost:${backend_port}/model/${inputsRoute}/run`, limits);
+            const response = await axios.post(`http://${backend_ip}:${backend_port}/model/${inputsRoute}/run`, limits);
             console.log('Backend reponse:', response.data);
             if (response.data.startsWith('returncode')){
               throw new Error("Error while running CO2BLOCK\n\n"+response.data);
@@ -47,7 +48,7 @@ const Model = ({inputsRoute, enteredInputs, selectedReservoir}) => {
 
     const getMaxScenario = async()=>{
       try {
-        const response = await axios.get(`http://localhost:${backend_port}/model/maxScenario`);
+        const response = await axios.get(`http://${backend_ip}:${backend_port}/model/maxScenario`);
         console.log('Get max scenario from backend', response.data);
         setMaxScenario(response.data);
       } catch (error) {

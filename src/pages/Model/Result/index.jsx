@@ -12,10 +12,12 @@ const Result= ({resultsGenerated, limits, maxScenario}) => {
     const [viewScenario, setViewScenario] = useState(false);
     //console.log(limits,maxScenario);
    
+
+    const backend_ip = process.env.REACT_APP_VPC_PRIVATE_IP;
     const backend_port = process.env.REACT_APP_BACKEND_PORT;
     const get_results = async()=>{
         try {
-            const response = await axios.get(`http://localhost:${backend_port}/model/results`);
+            const response = await axios.get(`http://${backend_ip}:${backend_port}/model/results`);
             setResults(response.data);
             console.log('Get CO2BLOCK outputs from backend', response.data);
         } catch (error) {
@@ -49,7 +51,7 @@ const Result= ({resultsGenerated, limits, maxScenario}) => {
         event.stopPropagation();
         if (results) 
             for (let i=0;i<results.length;i++){
-                await downloadFile(`http://localhost:${backend_port}/${results[i]}`);
+                await downloadFile(`http://${backend_ip}:${backend_port}/${results[i]}`);
             }
       };
 
@@ -83,7 +85,7 @@ const Result= ({resultsGenerated, limits, maxScenario}) => {
             {resultsGenerated && results?
                 <>
                   {results.slice(0,2).map((url, index) => (
-                    <img id={`pic${index+1}`} className='displayPic' key={index} src={getCacheBustedUrl(`http://localhost:${backend_port}/${url}`)} alt={`Outputs ${index}`} />
+                    <img id={`pic${index+1}`} className='displayPic' key={index} src={getCacheBustedUrl(`http://${backend_ip}:${backend_port}/${url}`)} alt={`Outputs ${index}`} />
                   ))}
                   
                   <button id='button1' className='custom-button' onClick={viewMaxScenario}>

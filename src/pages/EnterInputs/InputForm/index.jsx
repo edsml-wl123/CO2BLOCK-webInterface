@@ -8,6 +8,7 @@ const InputForm = ({ parentState, sendDataToParent }) => {
   const [inputs, setInputs] = useState(parentState.inputs);
   const [errors, setErrors] = useState('');
 
+  const backend_ip = process.env.REACT_APP_VPC_PRIVATE_IP;
   const backend_port = process.env.REACT_APP_BACKEND_PORT;
   
   const handleChange = (event) => {
@@ -42,7 +43,7 @@ const InputForm = ({ parentState, sendDataToParent }) => {
       // await keyword pauses the execution of the function until the promise is resolved
       // if the promise is rejected, it throws an error caught by the catch block
       try {
-        const response = await axios.post(`http://localhost:${backend_port}/save-inputs`, inputs);
+        const response = await axios.post(`http://${backend_ip}:${backend_port}/save-inputs`, inputs);
         console.log('Backend reponse:', response.data);
       } catch (error) {
         console.error('Error:', error);
