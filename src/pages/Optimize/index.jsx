@@ -33,7 +33,7 @@ const Optimize = ({readOutputs, accept}) => {
         const formData = new FormData();
         formData.append('file', file);
 
-        axios.post(`http://${backend_ip}:${backend_port}/optimize/upload`, formData)
+        axios.post(`http://${backend_ip}:${backend_port}/api/optimize/upload`, formData)
           .then(response => {
             console.log('File successfully uploaded:', response.data);
         })
@@ -60,7 +60,7 @@ const Optimize = ({readOutputs, accept}) => {
             console.log('Rates validated', validatedRates);
 
             try {
-                const response = await axios.post(`http://${backend_ip}:${backend_port}/optimize/run`,{
+                const response = await axios.post(`http://${backend_ip}:${backend_port}/api/optimize/run`,{
                     readOutputs:readOutputs, rates:validatedRates
                 });
                 console.log('Backend reponse:', response.data);
@@ -125,7 +125,7 @@ const Optimize = ({readOutputs, accept}) => {
 
     const getOptimizeResult = async() =>{
         try {
-            const response = await axios.get(`http://${backend_ip}:${backend_port}/optimize/result`);
+            const response = await axios.get(`http://${backend_ip}:${backend_port}/api/optimize/result`);
             setResult(response.data);
             console.log('Get optimization result from backend', response.data);
         } catch (error) {

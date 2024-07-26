@@ -43,7 +43,7 @@ const InputForm = ({ parentState, sendDataToParent }) => {
       // await keyword pauses the execution of the function until the promise is resolved
       // if the promise is rejected, it throws an error caught by the catch block
       try {
-        const response = await axios.post(`http://${backend_ip}:${backend_port}/save-inputs`, inputs);
+        const response = await axios.post(`http://${backend_ip}:${backend_port}/api/save-inputs`, inputs);
         console.log('Backend reponse:', response.data);
       } catch (error) {
         console.error('Error:', error);

@@ -36,7 +36,7 @@ const Map = ({ parentState, sendDataToParent, readData })=>{
   const backend_port = process.env.REACT_APP_BACKEND_PORT;
   const fetchData = async () => {
     try {
-      const response = await axios.get(`http://${backend_ip}:${backend_port}/reservoirs`);
+      const response = await axios.get(`http://${backend_ip}:${backend_port}/api/reservoirs`);
       setReservoirs(response.data);
       console.log('Get reservoirs data from backend', reservoirs[0])
     } catch (error) {
@@ -63,7 +63,7 @@ const Map = ({ parentState, sendDataToParent, readData })=>{
     try {
       const inputs = readData(site);
       console.log(inputs);
-      const response = await axios.post(`http://${backend_ip}:${backend_port}/save-inputs`, inputs);
+      const response = await axios.post(`http://${backend_ip}:${backend_port}/api/save-inputs`, inputs);
       console.log('Backend reponse:', response.data);
     } catch (error) {
       console.error('Error:', error);

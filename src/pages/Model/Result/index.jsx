@@ -17,7 +17,7 @@ const Result= ({resultsGenerated, limits, maxScenario}) => {
     const backend_port = process.env.REACT_APP_BACKEND_PORT;
     const get_results = async()=>{
         try {
-            const response = await axios.get(`http://${backend_ip}:${backend_port}/model/results`);
+            const response = await axios.get(`http://${backend_ip}:${backend_port}/api/model/results`);
             setResults(response.data);
             console.log('Get CO2BLOCK outputs from backend', response.data);
         } catch (error) {
