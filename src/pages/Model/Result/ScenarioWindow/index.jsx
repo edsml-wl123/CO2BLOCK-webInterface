@@ -1,10 +1,9 @@
 import React, { useEffect,useState } from 'react';
 import ReactDOM from 'react-dom';
 import _ from 'lodash';
-//import './index.css';
 
 
-const ScenarioWindow = ({ wellNum, distance, injectionRate, timeDuration, totalCO2Storage, onClose }) => {
+const ScenarioWindow = ({ wellNum, wellRadius, distance, injectionRate, timeDuration, correction, totalCO2Storage, onClose }) => {
     useEffect(() => {
       const newWindow = window.open('', 'MaxStorageScenario', 'width=700,height=450');
       const newDocument = newWindow.document;
@@ -53,7 +52,7 @@ const ScenarioWindow = ({ wellNum, distance, injectionRate, timeDuration, totalC
         }
         .info-box {
           position: absolute;
-          top: 20%;
+          top: 18%;
           right: 3%;
           background-color: #87CEEB;
           padding: 10px;
@@ -66,9 +65,11 @@ const ScenarioWindow = ({ wellNum, distance, injectionRate, timeDuration, totalC
       ReactDOM.render(
         <Scenario
           wellNum={wellNum}
+          wellRadius={wellRadius}
           distance={distance}
           injectionRate={injectionRate}
           timeDuration={timeDuration}
+          correction={correction}
           totalCO2Storage={totalCO2Storage}
         />,
         rootElement
@@ -80,18 +81,20 @@ const ScenarioWindow = ({ wellNum, distance, injectionRate, timeDuration, totalC
         newWindow.removeEventListener('beforeunload', onClose);
         //newWindow.close();
       };
-    }, [wellNum, distance, injectionRate, timeDuration, totalCO2Storage, onClose]);
+    }, [wellNum, wellRadius, distance, injectionRate, timeDuration, correction, totalCO2Storage, onClose]);
     return null;
   };
 
   
   
-const Scenario = ({ wellNum, distance, injectionRate, timeDuration, totalCO2Storage }) => {
+const Scenario = ({ wellNum, wellRadius, distance, injectionRate, timeDuration, correction, totalCO2Storage }) => {
     const [scenario, setScenario] = useState({
         wellNum:wellNum,
+        wellRadius:wellRadius,
         wellDistance:distance,
         injRate:injectionRate,
         injTime:timeDuration,
+        correction: correction,
         maxStorage:totalCO2Storage
     })
     const [grid, setGrid] = useState({
@@ -181,8 +184,10 @@ const Scenario = ({ wellNum, distance, injectionRate, timeDuration, totalCO2Stor
       <div className="info-box">
         <p><strong>Well number:</strong> {scenario.wellNum}</p>
         <p><strong>Interwell distance:</strong> {scenario.wellDistance}m</p>
-        <p><strong>Injection rate:</strong> {scenario.injRate} Mt/yr</p>
+        <p><strong>Correction:</strong> {scenario.correction}</p>
+        <p><strong>Well radius:</strong> {scenario.wellRadius}m</p>
         <p><strong>Time duration:</strong> {scenario.injTime} yr</p>
+        <p><strong>Injection rate:</strong> {scenario.injRate} Mt/yr</p>
         <p><strong>Total storage:</strong> {scenario.maxStorage.toFixed(7)} Gton</p>
       </div>
     </div>

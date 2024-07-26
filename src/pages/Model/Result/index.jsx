@@ -107,8 +107,9 @@ const Result= ({resultsGenerated, limits, maxScenario}) => {
 
             {resultsGenerated && results && viewScenario ? (
                   <ScenarioWindow totalCO2Storage={maxScenario.maxStorage} 
-                  wellNum={maxScenario.wellNum} distance={maxScenario.wellDistance} 
-                  injectionRate={parseFloat(limits.maxQ)} timeDuration={parseFloat(limits.injectionTime)}
+                  wellNum={maxScenario.wellNum} wellRadius={limits.wellRadius} 
+                  distance={maxScenario.wellDistance} injectionRate={parseFloat(limits.maxQ)} 
+                  timeDuration={parseFloat(limits.injectionTime)} correction={limits.correction}
                   onClose={onCloseScenario}/>
                 ):''}
         </div>
