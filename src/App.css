@@ -1,26 +1,16 @@
-/* .menu nav ul li {
-    cursor: pointer;
-    padding: 10px;
-    line-height: 1.8;
-    color: #515151;
-    list-style: none;
-    font-size: 20px;
-    font-weight: bold;
-  } */
-  
   aside {
     float: left;
     width: 15%;
     background-color: #dedede;
     height: 100vh;
-    padding: 20px;
+    padding: 1.68%;
     box-sizing: border-box;
   }
 
 
   .nav{
-    margin-top: 20px;
-    margin-left: 10px;
+    margin-top: 11.2%;
+    margin-left: 5.6%;
   }
 
 

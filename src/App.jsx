@@ -41,7 +41,7 @@ class App extends Component{
       selectedReservoir:null,
     };
 
-     
+    
     handleDataFromChild = (data) => {
         this.setState(data);
     };
@@ -69,6 +69,10 @@ class App extends Component{
 
 
     render() {
+//       let screenWidth = window.innerWidth;
+// let screenHeight = window.innerHeight;
+
+// console.log(`Width: ${screenWidth}px, Height: ${screenHeight}px`);
         return (
           <div className="menu">
             <aside>

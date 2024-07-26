@@ -198,7 +198,7 @@ const Optimize = ({readOutputs, accept}) => {
 
           {result?
             <>
-            <img style={{width:readOutputs?'650px':'',  top:readOutputs?'31%':''}}
+            <img style={{width:readOutputs?'45.5%':'',  top:readOutputs?'30.5%':''}}
             id='optimiza-result' className='optimizePic' src={getCacheBustedUrl(`http://${backend_ip}:${backend_port}/${result}`)} alt='optimizePic' />
             <button style={{marginLeft: readOutputs?'63%':'',marginTop: readOutputs?'35%':''}} 
             id='optDownload' onClick={handleDownload}>

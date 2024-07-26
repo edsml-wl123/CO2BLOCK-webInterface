@@ -46,16 +46,16 @@
 
 
 .enterRates {
-    width: 1200px;
+    width: 100%;
     margin-top: 10%;
     margin-left: 8%;
     border-radius: 8px;
-    max-width: 1000px;
-    line-height: 25px;
+    max-width: 84%;
+    line-height: 150%;
   }
 
 .form-group {
-    margin-bottom: 15px;
+    margin-bottom:1.6%;
     display: grid;
     grid-template-columns: repeat(6, 1fr); 
     gap: 10px; /* Space between grid items */
@@ -80,7 +80,7 @@ input[type="text"].rates {
     border: 1px solid #ccc;
     border-radius: 6px;
     width: 100%; /* Makes input fill its parent */
-    max-width: 150px; /* Maximum width for the input box */
+    max-width: 150px; 
 }
 
 
@@ -110,7 +110,7 @@ input[type="text"].rates {
 
 .optimizePic{
     position: absolute;
-    width: 600px;
+    width: 42%;
     top:37%;
     margin-left: 7%;
 }
@@ -118,7 +118,7 @@ input[type="text"].rates {
 
 #optDownload{
     margin-left: 60%;
-    margin-top: 31%;
+    margin-top: 31.5%;
     cursor: pointer;
     border: none;
     background-color: rgb(0,0,0,0);

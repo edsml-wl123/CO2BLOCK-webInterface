@@ -19,13 +19,8 @@ const Map = ({ parentState, sendDataToParent, readData })=>{
     iconAnchor: [15, 15],
     popupAnchor: [0, -15],      // Position of the popup relative to the icon anchor
   });
-  // const nocticeIcon = new L.Icon({
-  //   iconUrl: require('../../pic/notice-icon.png'),
-  //   iconSize: [30, 30],
-  //   iconAnchor: [15, 15],
-  //   popupAnchor: [0, -15],    
-  // });
 
+  
   const [reservoirs, setReservoirs] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);

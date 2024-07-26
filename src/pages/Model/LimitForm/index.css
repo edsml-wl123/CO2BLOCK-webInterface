@@ -1,18 +1,17 @@
 .enterLimits {
-    width: 1200px;
-    margin-top: 20px;
+    width: 100%;
+    margin-top: 2%;
     border-radius: 8px;
-    max-width: 1000px;
-    line-height: 25px;
+    max-width: 100%;
+    line-height: 150%;
   }
 
 .form-group {
     margin-bottom: 15px;
-    /* justify-content: space-between; Aligns items with space between them */
     display: grid;
     grid-template-columns: repeat(6, 1fr); 
-    gap: 10px; /* Space between grid items */
-  }
+    gap: 10px; 
+}
   
 .form-group label {
     display: block;

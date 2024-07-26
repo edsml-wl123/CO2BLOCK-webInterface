@@ -1,27 +1,26 @@
 .enterInputs {
-    width: 1200px;
-    margin-top: 65px;
+    width: 100%;
+    margin-top: 5%;
     border-radius: 8px;
-    max-width: 1000px;
+    max-width: 84%;
     margin-left: 8%;
-    line-height: 25px;
+    line-height: 150%;
   }
 
   h2{
-    margin-bottom: 25px;
+    margin-bottom: 2.5%;
   }
   
   #optionalInputs{
-    margin-top: 40px;
+    margin-top: 4%;
   }
 
 
   .form-group {
     margin-bottom: 15px;
-    /* justify-content: space-between; Aligns items with space between them */
     display: grid;
     grid-template-columns: repeat(6, 1fr); 
-    gap: 10px; /* Space between grid items */
+    gap: 10px; 
   }
   
   .form-group label {
@@ -42,7 +41,7 @@
     border: 1px solid #ccc;
     border-radius: 4px;
     width: 100%; /* Makes input fill its parent */
-    max-width: 150px; /* Maximum width for the input box */
+    max-width: 150px; 
 }
 
 
@@ -53,19 +52,15 @@
     margin-bottom: 0px; /* Adds space between lines */
   }
   
-/* .radio-group input[type="radio"] {
-    vertical-align: middle; 
-  } */
 
 
 .inputsSubmit{
-    top: 15px; 
-    /* margin-left: 100px; */
+    top: 24%; 
     background-color: #b0b0b0; 
     color: #1c1c1c; /* Dark text color */
     border: none; /* Remove default border */
     border-radius: 40px; /* Round corners */
-    padding: 15px 22px; /* Padding for size */
+    padding: 15px 0px; /* Padding for size */
     font-size: 18px; /* Font size */
     font-weight: bold; /* Bold text */
     text-align: center; /* Center text */
@@ -78,11 +73,11 @@
 .inputsSubmit::after {
     content: "";
     position: absolute;
-    bottom: 12px; /* Position of the underline */
+    bottom: 12px; 
     left: 50%;
     transform: translateX(-50%);
-    width: 70%; /* Width of the underline */
-    height: 2px; /* Thickness of the underline */
+    width: 70%;
+    height: 2px; 
     background-color: #333; /* Color of the underline */
 }
 
