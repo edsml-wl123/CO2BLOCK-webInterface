@@ -1,6 +1,8 @@
+// created by Wenxin Li, github name wl123
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import _ from 'lodash';
+import {getCacheBustedUrl, handleDownload} from '../../utils/downloadFile.js'
 import './index.css';
 import Loading from '../../pic/loading.gif';
 import uploadIcon from '../../pic/upload-icon.png'
@@ -10,6 +12,8 @@ import downloadIcon from '../../pic/downloadIcon.png';
 const Optimize = ({readOutputs, accept}) => {
     const [clicked, setClicked] = useState(false);
     const [upload, setUpload] = useState(false);
+
+    // Set state of specified cost and rates
     const [rates, setRates] = useState({
         capture_cost: 50,
         transport_cost: 8,
@@ -22,29 +26,27 @@ const Optimize = ({readOutputs, accept}) => {
 
     const handleClick = () => {
         setClicked(true);
-        console.log('clicked');
       };
 
 
-    const backend_ip = process.env.REACT_APP_VPC_PRIVATE_IP;
-    const backend_port = process.env.REACT_APP_BACKEND_PORT;
+    // Handle uploaded file
     const handleFileChange = (event) => {
         const file=event.target.files[0];
         const formData = new FormData();
         formData.append('file', file);
 
-        axios.post(`http://${backend_ip}:${backend_port}/api/optimize/upload`, formData)
+        axios.post(`/api/optimize/upload`, formData)
           .then(response => {
             console.log('File successfully uploaded:', response.data);
         })
         .catch(error => {
           console.error('There was an error uploading the file:', error);
         }); 
-
         setUpload(true);
       };
 
 
+    // Change the cost and rates state
     const handleChange = (event) => {
         const { name, value } = event.target;   
         setRates((prevRates) => ({
@@ -55,12 +57,12 @@ const Optimize = ({readOutputs, accept}) => {
 
     const handleSubmit = async(event) => {
         event.preventDefault();
-        const { isValid, validatedRates } = validateInputs();
+        const { isValid, validatedRates } = validateInputs();  // validate entered cost and rates
         if(isValid){
             console.log('Rates validated', validatedRates);
 
             try {
-                const response = await axios.post(`http://${backend_ip}:${backend_port}/api/optimize/run`,{
+                const response = await axios.post(`/api/optimize/run`,{
                     readOutputs:readOutputs, rates:validatedRates
                 });
                 console.log('Backend reponse:', response.data);
@@ -72,16 +74,17 @@ const Optimize = ({readOutputs, accept}) => {
                   alert(error);
             }
             setSubmitted(true);
-            // setUpload(false);
         }
         
     }
 
+    // Validate cost and revenue rates
     const validateInputs = () => {
         let isValid = true;
         let newErrors = '';
         let validatedRates = { ...rates };
         for(const field in rates){
+          // Revenue rates should be an array of numbers delimited by ','
           if (field==='revenue'){
             try{
                 if (typeof rates[field] === 'string'){
@@ -102,6 +105,7 @@ const Optimize = ({readOutputs, accept}) => {
             continue;
           }
     
+          // Cost should be a number
           const value = parseFloat(rates[field], 10);
           if (isNaN(value)) {
             newErrors += `The parameter ${field} must be a number;\n`;
@@ -118,14 +122,16 @@ const Optimize = ({readOutputs, accept}) => {
         return {isValid,validatedRates}; 
       };
 
+    // Alert errors if any
     useEffect(()=>{
         if(errors!=='') alert(errors);
     },[errors])
 
 
+    // Get optimization result from backend
     const getOptimizeResult = async() =>{
         try {
-            const response = await axios.get(`http://${backend_ip}:${backend_port}/api/optimize/result`);
+            const response = await axios.get(`/api/optimize/result`);
             setResult(response.data);
             console.log('Get optimization result from backend', response.data);
         } catch (error) {
@@ -138,34 +144,6 @@ const Optimize = ({readOutputs, accept}) => {
           }
         }
     };
-
-
-    const getCacheBustedUrl = (url) => {
-        return `${url}?t=${new Date().getTime()}`;
-    };
-
-
-    const handleDownload = async(event) => {
-        event.preventDefault();
-        event.stopPropagation();
-
-        if (result) 
-            await downloadFile(`http://${backend_ip}:${backend_port}/${result}`);
-      };
-
-    const downloadFile = async (url) => {
-        const response = await fetch(url);
-        const blob = await response.blob();
-        const blobUrl = window.URL.createObjectURL(blob);
-        const a = document.createElement('a');
-        a.style.display = 'none';
-        a.href = blobUrl;
-        a.download = url.split('/').pop(); 
-        document.body.appendChild(a);
-        a.click();
-        window.URL.revokeObjectURL(blobUrl);
-      };
-    
 
     
       return (
@@ -199,10 +177,10 @@ const Optimize = ({readOutputs, accept}) => {
           {result?
             <>
             <img style={{width:readOutputs?'45.5%':'',  top:readOutputs?'30.5%':''}}
-            id='optimiza-result' className='optimizePic' src={getCacheBustedUrl(`http://${backend_ip}:${backend_port}/${result}`)} alt='optimizePic' />
+            id='optimiza-result' className='optimizePic' src={getCacheBustedUrl(result)} alt='optimizePic' />
             <button style={{marginLeft: readOutputs?'63%':'',marginTop: readOutputs?'35%':''}} 
             id='optDownload' onClick={handleDownload}>
-                <img src={downloadIcon} className='downloadIcon' onClick={handleDownload}/>
+                <img src={downloadIcon} className='downloadIcon' onClick={(event)=>handleDownload(event, result)}/>
             </button>
             </> 
             : 

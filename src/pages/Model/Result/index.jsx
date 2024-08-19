@@ -1,7 +1,9 @@
+// created by Wenxin Li, github name wl123
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import _ from 'lodash';
+import {getCacheBustedUrl, handleDownload} from '../../../utils/downloadFile.js'
 import './index.css';
 import ScenarioWindow from './ScenarioWindow';
 import Loading from '../../../pic/loading.gif'
@@ -10,14 +12,11 @@ import downloadIcon from '../../../pic/downloadIcon.png'
 const Result= ({resultsGenerated, limits, maxScenario}) => {
     const [results, setResults] = useState(null);
     const [viewScenario, setViewScenario] = useState(false);
-    //console.log(limits,maxScenario);
-   
-
-    const backend_ip = process.env.REACT_APP_VPC_PRIVATE_IP;
-    const backend_port = process.env.REACT_APP_BACKEND_PORT;
+    
+  
     const get_results = async()=>{
         try {
-            const response = await axios.get(`http://${backend_ip}:${backend_port}/api/model/results`);
+            const response = await axios.get(`/api/model/results`);
             setResults(response.data);
             console.log('Get CO2BLOCK outputs from backend', response.data);
         } catch (error) {
@@ -31,6 +30,7 @@ const Result= ({resultsGenerated, limits, maxScenario}) => {
       } 
     };
 
+    // Get results when model finishes execution
     useEffect(()=>{
         if(resultsGenerated && results===null)
             get_results();
@@ -46,33 +46,7 @@ const Result= ({resultsGenerated, limits, maxScenario}) => {
     }
 
 
-    const handleDownload = async(event) => {
-        event.preventDefault();
-        event.stopPropagation();
-        if (results) 
-            for (let i=0;i<results.length;i++){
-                await downloadFile(`http://${backend_ip}:${backend_port}/${results[i]}`);
-            }
-      };
-
-    const downloadFile = async (url) => {
-        const response = await fetch(url);
-        const blob = await response.blob();
-        const blobUrl = window.URL.createObjectURL(blob);
-        const a = document.createElement('a');
-        a.style.display = 'none';
-        a.href = blobUrl;
-        a.download = url.split('/').pop(); // Use the filename from the URL
-        document.body.appendChild(a);
-        a.click();
-        window.URL.revokeObjectURL(blobUrl);
-      };
-
-
-    const getCacheBustedUrl = (url) => {
-        return `${url}?t=${new Date().getTime()}`;
-    };
-
+    // Navigate to optimization page when button clicked
     const navigate = useNavigate();
     const goRevenueOptimize = ()=>{
       navigate('/optimize/outputs');
@@ -85,15 +59,20 @@ const Result= ({resultsGenerated, limits, maxScenario}) => {
             {resultsGenerated && results?
                 <>
                   {results.slice(0,2).map((url, index) => (
-                    <img id={`pic${index+1}`} className='displayPic' key={index} src={getCacheBustedUrl(`http://${backend_ip}:${backend_port}/${url}`)} alt={`Outputs ${index}`} />
+                    <img id={`pic${index+1}`} className='displayPic' key={index} src={getCacheBustedUrl(url)} alt={`Outputs ${index}`} />
                   ))}
                   
                   <button id='button1' className='custom-button' onClick={viewMaxScenario}>
                     Max Storage<br/>Scenario</button>
                   <button id='button2' className='custom-button' onClick={goRevenueOptimize}>
                     Revenue<br/>Optimization</button>
-                  <button id='download' onClick={handleDownload}>
-                    <img src={downloadIcon} className='downloadIcon' onClick={handleDownload}/>
+                  <button id='download' onClick={(event)=>{handleDownload(event,results[0]);
+                    handleDownload(event,results[1]);handleDownload(event,results[2]);
+                    handleDownload(event, results[3]);}}>
+                    <img src={downloadIcon} className='downloadIcon' 
+                    onClick={(event)=>{handleDownload(event,results[0]);
+                      handleDownload(event,results[1]);handleDownload(event,results[2]);
+                      handleDownload(event,results[3]);}}/>
                   </button>
                 </> 
                 :(
@@ -108,7 +87,7 @@ const Result= ({resultsGenerated, limits, maxScenario}) => {
             {resultsGenerated && results && viewScenario ? (
                   <ScenarioWindow totalCO2Storage={maxScenario.maxStorage} 
                   wellNum={maxScenario.wellNum} wellRadius={limits.wellRadius} 
-                  distance={maxScenario.wellDistance} injectionRate={parseFloat(limits.maxQ)} 
+                  distance={maxScenario.wellDistance} injectionRate={parseFloat(maxScenario.flowRate)} 
                   timeDuration={parseFloat(limits.injectionTime)} correction={limits.correction}
                   onClose={onCloseScenario}/>
                 ):''}

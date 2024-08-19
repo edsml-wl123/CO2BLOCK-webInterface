@@ -1,91 +1,92 @@
+// created by Wenxin Li, github name wl123
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import _ from 'lodash';
 import axios from 'axios';
 import './index.css';
 
+
 const InputForm = ({ parentState, sendDataToParent }) => {
-  const [inputs, setInputs] = useState(parentState.inputs);
-  const [errors, setErrors] = useState('');
+  const [inputs, setInputs] = useState(parentState.inputs); // State to manage form inputs
+  const [errors, setErrors] = useState(''); // State to manage validation errors
 
-  const backend_ip = process.env.REACT_APP_VPC_PRIVATE_IP;
-  const backend_port = process.env.REACT_APP_BACKEND_PORT;
-  
+
+  // Handle input change events
   const handleChange = (event) => {
-    const { name, value } = event.target;
+      const { name, value } = event.target;
 
-    if(name==='domainType'){
-      if(event.target.checked)
-        setInputs((prevInputs) => ({
-            ...prevInputs,
-            domainType: value,
-        }));
-    }
-    else{
-      setInputs((prevInputs) => ({
-        ...prevInputs,
-        [name]: value,
-      }));
-    }
+      if(name === 'domainType') {
+          if(event.target.checked) {
+              setInputs((prevInputs) => ({
+                  ...prevInputs,
+                  domainType: value,
+              }));
+          }
+      } else {
+          setInputs((prevInputs) => ({
+              ...prevInputs,
+              [name]: value,
+          }));
+      }
   };
-  
 
-  useEffect(()=>{
-    setInputs(parentState.inputs)  // update inputs when the App passes in different uploaded inputs
+  // Update inputs when parentState changes
+  useEffect(() => {
+      setInputs(parentState.inputs);
   }, [parentState]);
-  
 
-  const navigate = useNavigate();
+  const navigate = useNavigate(); // Initialize navigation hook
+
+  // Handle form submission
   const handleSubmit = async (event) => {
-    event.preventDefault();
-    if (validateInputs()) {
-      console.log('Form Submitted');    
-      // await keyword pauses the execution of the function until the promise is resolved
-      // if the promise is rejected, it throws an error caught by the catch block
-      try {
-        const response = await axios.post(`http://${backend_ip}:${backend_port}/api/save-inputs`, inputs);
-        console.log('Backend reponse:', response.data);
-      } catch (error) {
-        console.error('Error:', error);
-      }
+      event.preventDefault(); // Prevent default form submission behavior
+      if (validateInputs()) { // Validate inputs before submitting
+          console.log('Form Submitted');
+          try {
+              // POST request to save inputs
+              const response = await axios.post(`/api/save-inputs`, inputs);
+              console.log('Backend response:', response.data);
+          } catch (error) {
+              console.error('Error:', error);
+          }
 
-      const newParentState = {
-        ...parentState,
-        // activeModule: 'model',
-        inputs: inputs
-      };
-      sendDataToParent(newParentState);
-      navigate('/model/enter-inputs');
-    }
+          // Update parent state with current inputs
+          const newParentState = {
+              ...parentState,
+              inputs: inputs
+          };
+          sendDataToParent(newParentState); // Send updated state to parent
+          navigate('/model/enter-inputs'); // Navigate to another route
+      }
   };
 
+  // Validate form inputs
   const validateInputs = () => {
-    let isValid = true;
-    let newErrors = '';
-    for(const field in inputs){
-      if (field==='name' || field=='domainType') continue;
-  
-      if (inputs[field]!=null && inputs[field]!=''){
-        const value = parseFloat(inputs[field]);
-        if (isNaN(value) || value < 0) {
-          newErrors += `The field ${field} must be a non-negative number;\n`;
-          isValid = false;   
-        }
+      let isValid = true;
+      let newErrors = '';
+      for(const field in inputs) {
+          if (field === 'name' || field === 'domainType') continue;
+
+          if (inputs[field] != null && inputs[field] !== '') {
+              const value = parseFloat(inputs[field]);
+              if (isNaN(value) || value < 0) {
+                  newErrors += `The field ${field} must be a non-negative number;\n`;
+                  isValid = false;
+              }
+          }
       }
-    }
-    if (newErrors!==errors){
-      setErrors(newErrors);
-    }
-    else{
-      if (errors!=='') alert(errors);
-    }
-    return isValid; 
+      if (newErrors !== errors) {
+          setErrors(newErrors);
+      } else {
+          if (errors !== '') alert(errors);
+      }
+      return isValid;
   };
 
-  useEffect(()=>{
-    if(errors!=='') alert(errors);
-  },[errors])
-  
+  // Alert errors if they change
+  useEffect(() => {
+      if (errors !== '') alert(errors);
+  }, [errors]);
 
 
   return (
@@ -115,12 +116,6 @@ const InputForm = ({ parentState, sendDataToParent }) => {
             <input id='closed' type='radio' name='domainType' value='closed'
             checked={inputs.domainType.toLowerCase() === 'closed'} onChange={handleChange} /> Closed
           </div>
-          {/* <div className='checkbox-group'>
-          <input id='open' type="checkbox" name="domainType" value="open" 
-          defaultChecked={inputs.domainType.toLowerCase()==='open' ? true:null} onChange={handleChange}/>Open
-          <input id='close' type="checkbox" name="domainType" value="close" 
-          defaultChecked={inputs.domainType.toLowerCase()==='close'? true:null} onChange={handleChange}/>Close
-          </div> */}
         </div>
 
         <h2 id='optionalInputs'>Optional Inputs</h2>

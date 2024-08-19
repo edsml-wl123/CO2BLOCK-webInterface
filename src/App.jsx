@@ -1,8 +1,10 @@
+// created by Wenxin Li, github name wl123
+
 import React, { Component }from 'react'
 import { Route, Routes, NavLink, Navigate} from 'react-router-dom';
 import InputForm from './pages/EnterInputs/InputForm';
 import FileUploader from './pages/EnterInputs/FileUploader';
-import {readExcelFile, readReservoirData} from './readData.js';
+import {readExcelFile, readReservoirData} from './utils/readData.js';
 import Map from './pages/Map';
 import Model from './pages/Model';
 import Optimize from './pages/Optimize'
@@ -11,6 +13,7 @@ import './App.css'
 
 
 class App extends Component{
+    // State of model inputs
     state = { 
       activeModule: 'Map',
       inputs: {
@@ -41,12 +44,13 @@ class App extends Component{
       selectedReservoir:null,
     };
 
-    
+    // Receive data from children components
     handleDataFromChild = (data) => {
         this.setState(data);
     };
 
 
+    // Set state when the active module is changed
     handleModuleChange = (module) => {
       if (module !== this.state.activeModule) {
         if (module==='enter-inputs'){
@@ -69,13 +73,10 @@ class App extends Component{
 
 
     render() {
-//       let screenWidth = window.innerWidth;
-// let screenHeight = window.innerHeight;
-
-// console.log(`Width: ${screenWidth}px, Height: ${screenHeight}px`);
         return (
           <div className="menu">
             <aside>
+              {/* Navigator bar */}
               <nav className='nav'>
                 <NavLink className={({ isActive }) => {
                   if (isActive) {
@@ -113,6 +114,7 @@ class App extends Component{
                   }} to="/help">Help</NavLink> <br/><br/><br/>
               </nav>
             </aside>
+            {/* Main area rendered by different components according to routes */}
             <main className={this.state.activeModule==='model'||this.state.activeModule==='optimize' ? 'gray-main':'blue-main'}>
               <Routes>
                 <Route path="/" element={<Navigate to="/map" />} />

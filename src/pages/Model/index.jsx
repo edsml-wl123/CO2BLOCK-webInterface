@@ -1,3 +1,5 @@
+// created by Wenxin Li, github name wl123
+
 import React, { useState, useEffect } from 'react';
 import _ from 'lodash';
 import axios from 'axios';
@@ -7,13 +9,13 @@ import Result from './Result';
 
 const Model = ({inputsRoute, enteredInputs, selectedReservoir}) => {
     const [receivedInputs, setReceivedInputs] = useState(null);
-    // const {reservoirID} = useParams();  // variable name has to be the same as the one specified in the route
     const [submitted, setSubmitted] = useState(false); 
     const [limits, setLimits] = useState(null);
     const [resultsGenerated, setResultsGenerated] = useState(null);
     const [maxScenario, setMaxScenario] = useState(null);
     const [error, setError] = useState(null);
 
+    // Set received inputs to state
     useEffect(() => {
         if(inputsRoute==='enter-inputs' && enteredInputs!==null) setReceivedInputs(enteredInputs);
         if(inputsRoute==='map' && selectedReservoir!==null) setReceivedInputs(selectedReservoir);
@@ -26,28 +28,28 @@ const Model = ({inputsRoute, enteredInputs, selectedReservoir}) => {
         runCO2BLOCK(limits);
     };
 
-    const backend_ip = process.env.REACT_APP_VPC_PRIVATE_IP;
-    const backend_port = process.env.REACT_APP_BACKEND_PORT;
+
     const runCO2BLOCK = async(limits) => {
         try {
-            const response = await axios.post(`http://${backend_ip}:${backend_port}/api/model/${inputsRoute}/run`, limits);
+            const response = await axios.post(`/api/model/${inputsRoute}/run`, limits);
             console.log('Backend reponse:', response.data);
             if (response.data.startsWith('returncode')){
               throw new Error("Error while running CO2BLOCK\n\n"+response.data);
             }
 
-            setResultsGenerated(response.data);
+            // Set outputs and Maximum storage scenario to states when backend model finishes running
+            setResultsGenerated(response.data); 
             getMaxScenario();
-            // navigate(`/model/${inputsRoute}/run`);
         } catch (error) {
             setError(error);
             alert(error);
         }
     }
 
+    // Get the maximum storage scenario from backend
     const getMaxScenario = async()=>{
       try {
-        const response = await axios.get(`http://${backend_ip}:${backend_port}/api/model/maxScenario`);
+        const response = await axios.get(`/api/model/maxScenario`);
         console.log('Get max scenario from backend', response.data);
         setMaxScenario(response.data);
       } catch (error) {
@@ -111,7 +113,7 @@ const Model = ({inputsRoute, enteredInputs, selectedReservoir}) => {
     );
 }
 
-
+// Captitalize a string
 const capitalize = (str) => {
     return str.charAt(0).toUpperCase() + str.slice(1);
 };

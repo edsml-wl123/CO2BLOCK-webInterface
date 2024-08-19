@@ -1,3 +1,4 @@
+// created by Wenxin Li, github name wl123
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { MapContainer, TileLayer, Marker, Popup, Tooltip, Circle} from 'react-leaflet';
@@ -17,30 +18,26 @@ const Map = ({ parentState, sendDataToParent, readData })=>{
     iconUrl: require('../../pic/marker-icon.png'),
     iconSize: [30, 30],
     iconAnchor: [15, 15],
-    popupAnchor: [0, -15],      // Position of the popup relative to the icon anchor
+    popupAnchor: [0, -15],  // Position of the popup relative to the icon anchor
   });
 
   
   const [reservoirs, setReservoirs] = useState([]);
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState(null);
   const [heatMap, setHeatMap] = useState(false);
+
+  // States to handle hover effects
   const [hovered1, setHovered1] = useState(false);
   const [hovered2, setHovered2] = useState(false);
   const [hovered3, setHovered3] = useState(false);
   const [hovered4, setHovered4] = useState(false);
-  const [fillOpacity, setFillOpacity] = useState(0.0);
 
 
-  const backend_ip = process.env.REACT_APP_VPC_PRIVATE_IP;
-  const backend_port = process.env.REACT_APP_BACKEND_PORT;
   const fetchData = async () => {
     try {
-      const response = await axios.get(`http://${backend_ip}:${backend_port}/api/reservoirs`);
+      const response = await axios.get(`/api/reservoirs`);
       setReservoirs(response.data);
       console.log('Get reservoirs data from backend', reservoirs[0])
     } catch (error) {
-      setError(error);
       if (error.response) {
         alert(`Error: ${error.response.data.message}`);
       } else if (error.request) {
@@ -48,8 +45,6 @@ const Map = ({ parentState, sendDataToParent, readData })=>{
       } else {
         alert(`Error: ${error.message}`); // Other errors (network issues, etc.)
       }
-    } finally{
-      setLoading(false);
     }
   };
 
@@ -59,16 +54,18 @@ const Map = ({ parentState, sendDataToParent, readData })=>{
 
 
   const navigate = useNavigate();
+  // Navigate to Model page when button is clicked
   const goToModel= async(site) => {
     try {
       const inputs = readData(site);
       console.log(inputs);
-      const response = await axios.post(`http://${backend_ip}:${backend_port}/api/save-inputs`, inputs);
+      const response = await axios.post(`/api/save-inputs`, inputs);
       console.log('Backend reponse:', response.data);
     } catch (error) {
       console.error('Error:', error);
     }
 
+    // Send parameters of selected reservoir to parent component
     const newParentState = {
       ...parentState,
       activeModule: 'model',
@@ -87,6 +84,7 @@ const Map = ({ parentState, sendDataToParent, readData })=>{
   }
 
 
+  // Get color and size of circle according to theoretical capacity and area size
   const getColor = (co2) => {
     return co2 > 4000 ? '#A90001' :
            co2 > 3000 ? '#A70001' :
@@ -104,38 +102,9 @@ const Map = ({ parentState, sendDataToParent, readData })=>{
     return r*1000;
   };
 
-  // useEffect(() => {
-  //   if (heatMap) {
-  //     let opacity = 0;
-  //     const interval = setInterval(() => {
-  //       setFillOpacity((prevOpacity) => {
-  //         if (prevOpacity < 0.54) {
-  //           opacity = prevOpacity + 0.05;
-  //           console.log('add opacity:', opacity);
-  //           return opacity;
-  //         } else {
-  //           clearInterval(interval);
-  //           return prevOpacity;
-  //         }
-  //       });
-  //     }, 200); // Adjust interval timing (milliseconds) for smoother transition
-  //     return () => clearInterval(interval);
-  //   }
-  // }, [heatMap]);
-
 
 
   return (
-    // <div>
-    //   <h2>{fillOpacity}</h2>
-    //   <button onClick={goToHeatMap} onMouseEnter={() => setHovered2(true)} onMouseLeave={() => setHovered2(false)}
-    //     style={{ display:!heatMap?'inline':'none', pointerEvents:!heatMap?'auto':'none',
-    //       cursor: 'pointer', padding: '10px', color:'#3D3D3D', fontSize:'15px', fontWeight:'bold',
-    //       backgroundColor: hovered2?'rgb(150,150,150,0.8)':'rgb(180,180,180,0.8)', border: 'none', borderRadius: '10px' }}>
-    //       Overall CO2<br/>Storage
-    //     </button>
-    // </div>
-    
     <MapContainer center={[57.5, 1.16]} zoom={6} style={{ height: '100vh', width: '100%' }}>
       <TileLayer
         url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"

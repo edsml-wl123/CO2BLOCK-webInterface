@@ -1,6 +1,9 @@
+// created by Wenxin Li, github name wl123
 import * as XLSX from 'xlsx';
 import _ from 'lodash';
 
+
+// Read model parameters from uploaded file according to column names
 function readExcelFile(file, callback){
     const reader = new FileReader();
 
@@ -47,9 +50,9 @@ function readExcelFile(file, callback){
 };
   
 
+// Read model parameters of the selected reservoir unit
 function readReservoirData(selectedReservoir){
   const jsonData = _.cloneDeep(selectedReservoir);
-  //console.log(jsonData);
   let inputs_data = {
     name: searchKeyInJSON(jsonData, 'unit name').value,
     area: searchKeyInJSON(jsonData, 'area (km^2)').value,
@@ -90,9 +93,9 @@ function readReservoirData(selectedReservoir){
 
 }
 
+// Check whether a substring is included in a string
 function searchKeyInJSON(data, searchString){
   for (const key in data) {
-    //console.log(key);
     if (key.toLowerCase().includes(searchString)) {
       return { key, value: data[key] };
     }

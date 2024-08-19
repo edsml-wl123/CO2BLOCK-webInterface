@@ -1,80 +1,86 @@
+// created by Wenxin Li, github name wl123
 import React, { useState, useEffect } from 'react';
 import _ from 'lodash';
 import './index.css';
 
-const LimitForm = ({sendDataToParent}) => {
-    const [limits, setLimits] = useState({
-        injectionTime:'30', 
-        minDistance:'2', 
-        maxDistance:'auto', 
-        numDistance:'30', 
-        maxWellNum:'auto', 
-        wellRadius:'0.2', 
-        maxQ:'5', 
-        correction:'off'});
-    const [errors, setErrors]=useState('');
+const LimitForm = ({ sendDataToParent }) => {
+  // Initialize state with default limits and errors
+  const [limits, setLimits] = useState({
+      injectionTime: '30', 
+      minDistance: '2', 
+      maxDistance: 'auto', 
+      numDistance: '30', 
+      maxWellNum: 'auto', 
+      wellRadius: '0.2', 
+      maxQ: '5', 
+      correction: 'off'
+  });
+  const [errors, setErrors] = useState('');
 
-
-    const handleChange = (event) => {
-        const { name, value } = event.target;
-      
-        if (name==='correction'){
-            if(event.target.checked)
-                setLimits((prevLimits) => ({
-                    ...prevLimits,
-                    correction: value,
-                }));
-        }
-        else{
-            setLimits((prevLimits) => ({
-                ...prevLimits,
-                [name]: value,
-              }));
-        }
-      };
-
-    const handleSubmit = async(event) => {
-        event.preventDefault();
-        // console.log(limits);
-        if(validateInputs()){
-            console.log('Limits validated');
-            sendDataToParent(limits);
-        }
-    }
-
-    const validateInputs = () => {
-        let isValid = true;
-        let newErrors = '';
-        for(const field in limits){
-          if (field==='correction') continue;
+  // Handle input changes
+  const handleChange = (event) => {
+      const { name, value } = event.target;
     
-          if((field==='maxWellNum'||field==='maxDistance')&&limits[field]==='auto') continue;
-          if(field==='numDistance'){
-            const value = parseInt(limits[field], 10);
-            if (isNaN(value) || value <= 0 || value!==parseFloat(limits[field])) {
-              newErrors += `The parameter ${field} must be a positive integer number;\n`;
-              isValid = false;   
-              continue;
-            }
+      if (name === 'correction') {
+          if (event.target.checked) {
+              setLimits((prevLimits) => ({
+                  ...prevLimits,
+                  correction: value,
+              }));
           }
-          const value = parseFloat(limits[field]);
+      } else {
+          setLimits((prevLimits) => ({
+              ...prevLimits,
+              [name]: value,
+          }));
+      }
+  };
+
+  // Handle form submission
+  const handleSubmit = async (event) => {
+      event.preventDefault(); // Prevent default form submission
+      if (validateInputs()) { // Validate inputs before sending
+          console.log('Limits validated');
+          sendDataToParent(limits); // Send limits data to parent component
+      }
+  };
+
+  // Validate form inputs
+  const validateInputs = () => {
+      let isValid = true;
+      let newErrors = '';
+      for (const field in limits) {
+          if (field === 'correction') continue;
+
+          // The limits can be 'auto'
+          if ((field === 'maxWellNum' || field === 'maxDistance') && limits[field] === 'auto') continue;
+
+          if (field === 'numDistance') {  
+              const value = parseInt(limits[field], 10);  // check if the limit is an integer
+              if (isNaN(value) || value <= 0 || value !== parseFloat(limits[field])) {
+                  newErrors += `The parameter ${field} must be a positive integer number;\n`;
+                  isValid = false;
+                  continue;
+              }
+          }
+          const value = parseFloat(limits[field]);  // check if the limit is a number
           if (isNaN(value) || value <= 0) {
               newErrors += `The parameter ${field} must be a positive number;\n`;
-              isValid = false;   
+              isValid = false;
           }
-        }
-        if (newErrors!==errors){
-            setErrors(newErrors);
-        }
-        else{
-            if (errors!=='') alert(errors);
-        }
-        return isValid; 
-      };
+      }
+      if (newErrors !== errors) {
+          setErrors(newErrors);
+      } else {
+          if (errors !== '') alert(errors); // Alert errors if any
+      }
+      return isValid; 
+  };
 
-    useEffect(()=>{
-        if(errors!=='') alert(errors);
-    },[errors])
+  // Alert errors if they change
+  useEffect(() => {
+      if (errors !== '') alert(errors);
+  }, [errors]);
 
 
     return(
@@ -110,18 +116,9 @@ const LimitForm = ({sendDataToParent}) => {
                   <input id='off' type='radio' name='correction' value='off'
                   checked={limits.correction==='off'} onChange={handleChange} /> Off
               </div>
-                {/* <div className='checkbox-group'>
-                  <label>Correction: </label>
-                  <input id='on' type="checkbox" name="correction" value="on"
-                  defaultChecked={limits.correction==='on' ? true:null} onChange={handleChange}/>On
-                  <input id='off' type="checkbox" name="correction" value="off" 
-                  defaultChecked={limits.correction==='off'? true:null} onChange={handleChange}/>Off
-                </div> */}
               </div>
               <button className="limitsSubmit" type="submit">RUN</button>
             </form>
-            
-
         </div>
     );
 }

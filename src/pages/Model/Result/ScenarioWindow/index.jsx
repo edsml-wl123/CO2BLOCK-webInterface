@@ -1,3 +1,4 @@
+// created by Wenxin Li, github name wl123
 import React, { useEffect,useState } from 'react';
 import ReactDOM from 'react-dom';
 import _ from 'lodash';
@@ -5,6 +6,7 @@ import _ from 'lodash';
 
 const ScenarioWindow = ({ wellNum, wellRadius, distance, injectionRate, timeDuration, correction, totalCO2Storage, onClose }) => {
     useEffect(() => {
+      // Open a new window to display maximum storage scenario
       const newWindow = window.open('', 'MaxStorageScenario', 'width=700,height=450');
       const newDocument = newWindow.document;
   
@@ -88,6 +90,7 @@ const ScenarioWindow = ({ wellNum, wellRadius, distance, injectionRate, timeDura
   
   
 const Scenario = ({ wellNum, wellRadius, distance, injectionRate, timeDuration, correction, totalCO2Storage }) => {
+    // Set the state maximum storage scenario
     const [scenario, setScenario] = useState({
         wellNum:wellNum,
         wellRadius:wellRadius,
@@ -97,6 +100,7 @@ const Scenario = ({ wellNum, wellRadius, distance, injectionRate, timeDuration, 
         correction: correction,
         maxStorage:totalCO2Storage
     })
+    // Set layout of wells
     const [grid, setGrid] = useState({
         rowGrid:Math.floor(Math.sqrt(wellNum)), 
         colGrid: Math.ceil(Math.sqrt(wellNum))});
@@ -112,9 +116,9 @@ const Scenario = ({ wellNum, wellRadius, distance, injectionRate, timeDuration, 
     console.log(grid, wellPositions);
 
 
+    // Adjust of line weights and size of circles according to nuumber of wells
     const getLineWidth = (rowGrid) => {
       if (rowGrid > 40) return '0.5px';
-      // if (rowGrid > 20) return '0.75px';
       if (rowGrid > 15) return '1px';
       if (rowGrid > 10) return '1.5px';
       if (rowGrid > 5) return '2px';
@@ -187,7 +191,7 @@ const Scenario = ({ wellNum, wellRadius, distance, injectionRate, timeDuration, 
         <p><strong>Correction:</strong> {scenario.correction}</p>
         <p><strong>Well radius:</strong> {scenario.wellRadius}m</p>
         <p><strong>Time duration:</strong> {scenario.injTime} yr</p>
-        <p><strong>Injection rate:</strong> {scenario.injRate} Mt/yr</p>
+        <p><strong>Max flow rate:</strong> {scenario.injRate.toFixed(7)} Mt/yr</p>
         <p><strong>Total storage:</strong> {scenario.maxStorage.toFixed(7)} Gton</p>
       </div>
     </div>
